@@ -1,7 +1,6 @@
 package me.eccentric_nz.plugins.discoverwarps;
 
 import java.io.File;
-import java.io.IOException;
 import net.milkbowl.vault.Vault;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -60,12 +59,6 @@ public class DiscoverWarps extends JavaPlugin {
         commando = new DiscoverWarpsCommands(this);
         getCommand("discoverwarps").setExecutor(commando);
 
-        try {
-            MetricsLite metrics = new MetricsLite(this);
-            metrics.start();
-        } catch (IOException e) {
-            // Failed to submit the stats :-(
-        }
         // check config
         new DiscoverWarpsConfig(this).checkConfig();
 
