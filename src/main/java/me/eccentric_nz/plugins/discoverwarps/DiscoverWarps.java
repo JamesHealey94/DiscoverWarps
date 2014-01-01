@@ -15,7 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class DiscoverWarps extends JavaPlugin {
 
     private final DiscoverWarpsDatabase service = DiscoverWarpsDatabase.getInstance();
-    private DiscoverWarpsCommands commando;
+    private DiscoverWarpsCommands commands;
     private final PluginManager pm = Bukkit.getServer().getPluginManager();
     private DiscoverWarpsPlateListener plateListener;
     private DiscoverWarpsProtectionListener protectionListener;
@@ -55,8 +55,8 @@ public class DiscoverWarps extends JavaPlugin {
             console.sendMessage(MY_PLUGIN_NAME + " Connection and Tables Error: " + e);
         }
         registerListeners();
-        commando = new DiscoverWarpsCommands(this);
-        getCommand("discoverwarps").setExecutor(commando);
+        commands = new DiscoverWarpsCommands(this);
+        getCommand("discoverwarps").setExecutor(commands);
 
         // check config
         new DiscoverWarpsConfig(this).checkConfig();
