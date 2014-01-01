@@ -449,10 +449,6 @@ public class DiscoverWarpsCommands implements CommandExecutor {
 
         final Player thePlayer = p;
         final Location theLocation = l;
-        final World to = theLocation.getWorld();
-        final boolean allowFlight = thePlayer.getAllowFlight();
-        final boolean crossWorlds = (from != to);
-        final boolean isSurvival = checkSurvival(to);
 
         // adjust location to centre of plate
         theLocation.setX(l.getX() + 0.5);
@@ -479,30 +475,7 @@ public class DiscoverWarpsCommands implements CommandExecutor {
                 if (plugin.getConfig().getBoolean("no_damage")) {
                     thePlayer.setNoDamageTicks(plugin.getConfig().getInt("no_damage_time") * 20);
                 }
-                if (thePlayer.getGameMode() == GameMode.CREATIVE || (allowFlight && crossWorlds && !isSurvival)) {
-                    thePlayer.setAllowFlight(true);
-                }
             }
         }, 10L);
     }
-
-    /**
-     * Checks if the world the player is teleporting to is a SURVIVAL world.
-     *
-     * @param w the world to check
-     * @return true if the world is a SURVIVAL world, otherwise false
-     */
-    private boolean checkSurvival(World w) {
-        boolean bool = false;
-        if (plugin.pm.isPluginEnabled("Multiverse-Core")) {
-            MultiverseCore mv = (MultiverseCore) plugin.pm.getPlugin("Multiverse-Core");
-            MultiverseWorld mvw = mv.getCore().getMVWorldManager().getMVWorld(w);
-            GameMode gm = mvw.getGameMode();
-            if (gm.equals(GameMode.SURVIVAL)) {
-                bool = true;
-            }
-        }
-        return bool;
-    }
-
 }
