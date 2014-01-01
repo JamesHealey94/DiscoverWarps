@@ -32,6 +32,7 @@ public class DiscoverWarpsCommands implements CommandExecutor {
 
     public DiscoverWarpsCommands(DiscoverWarps plugin) {
         this.plugin = plugin;
+
         this.admincmds = new ArrayList<String>();
         admincmds.add("set");
         admincmds.add("delete");
@@ -39,13 +40,14 @@ public class DiscoverWarpsCommands implements CommandExecutor {
         admincmds.add("disable");
         admincmds.add("auto");
         admincmds.add("cost");
-        admincmds.add("sign");
         admincmds.add("allow_buying");
         admincmds.add("xp_on_discover");
+
         this.usercmds = new ArrayList<String>();
         usercmds.add("tp");
         usercmds.add("list");
         usercmds.add("buy");
+
         plugin_name = ChatColor.GOLD + "[" + this.plugin.getConfig().getString("localisation.plugin_name") + "] " + ChatColor.RESET;
         validBlocks.add(Material.WOOD_PLATE);
         validBlocks.add(Material.STONE_PLATE);
@@ -99,12 +101,6 @@ public class DiscoverWarpsCommands implements CommandExecutor {
                 if (args.length < 2) {
                     sender.sendMessage(plugin_name + plugin.getConfig().getString("localisation.commands.arguments"));
                     return false;
-                }
-                if (args[0].equalsIgnoreCase("sign")) {
-                    plugin.getConfig().set("sign", args[1]);
-                    sender.sendMessage(plugin_name + "sign " + String.format(plugin.getConfig().getString("localisation.config"), args[1]));
-                    plugin.saveConfig();
-                    return true;
                 }
                 if (args[0].equalsIgnoreCase("set")) {
                     if (sender instanceof Player) {

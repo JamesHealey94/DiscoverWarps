@@ -20,7 +20,6 @@ public class DiscoverWarps extends JavaPlugin {
     private DiscoverWarpsPlateListener plateListener;
     private DiscoverWarpsProtectionListener protectionListener;
     private DiscoverWarpsExplodeListener explodeListener;
-    private DiscoverWarpsSignListener signListener;
     private Vault vault;
     public Economy economy;
     private FileConfiguration config = null;
@@ -107,11 +106,8 @@ public class DiscoverWarps extends JavaPlugin {
         plateListener = new DiscoverWarpsPlateListener(this);
         protectionListener = new DiscoverWarpsProtectionListener(this);
         explodeListener = new DiscoverWarpsExplodeListener(this);
-        signListener = new DiscoverWarpsSignListener(this);
         pm.registerEvents(plateListener, this);
         pm.registerEvents(protectionListener, this);
         pm.registerEvents(explodeListener, this);
-        pm.registerEvents(signListener, this);
-
     }
 }

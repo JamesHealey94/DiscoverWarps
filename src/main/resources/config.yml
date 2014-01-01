@@ -3,7 +3,6 @@ no_damage_time: 10
 allow_buying: false
 xp_on_discover: false
 xp_to_give: 3
-sign: discoverwarp
 debug: false
 
 ## do not remove or change '%s' as these are needed to insert the warp names and config options
@@ -36,7 +35,6 @@ localisation:
   buying:
     no_buying: You are not allowed to buy DiscoverWarps on this server!
     cannot_buy: You cannot buy the location of DiscoverPlate %s!
-    no_money: You don't have enough money to use this sign!
     no_need: You have already discovered %s!
     bought: You bought the DiscoverPlate location %s for
   ## general messages
@@ -59,8 +57,3 @@ localisation:
     warp: To warp to a DiscoverPlate type
     buy: To buy a DiscoverPlate location type
     config: To toggle DiscoverWarps config settings type
-  ## sign messages
-  signs:
-    no_money: You don't have enough maney to use this sign!
-    needs_discover: You have not discovered %s yet!
-    sign_made: Sign set successfully!

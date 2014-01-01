@@ -33,7 +33,6 @@ public class DiscoverWarpsConfig {
         intOptions.put("xp_to_give", 3);
 
         // string
-        strOptions.put("sign", "discoverwarp");
         strOptions.put("localisation.plugin_name", "DiscoverWarps");
         strOptions.put("localisation.config", "was set to %s");
         strOptions.put("localisation.commands.help", "Help");
@@ -55,7 +54,6 @@ public class DiscoverWarpsConfig {
         strOptions.put("localisation.commands.restart", "A server restart will be needed in order to hook %s into your economy plugin");
         strOptions.put("localisation.buying.no_buying", "You are not allowed to buy DiscoverWarps on this server!");
         strOptions.put("localisation.buying.cannot_buy", "You cannot buy the location of DiscoverPlate %s!");
-        strOptions.put("localisation.buying.no_money", "You don't have enough money to use this sign!");
         strOptions.put("localisation.buying.no_need", "You have already discovered %s!");
         strOptions.put("localisation.buying.bought", "You bought the DiscoverPlate location %s for");
         strOptions.put("localisation.discovered", "You have discovered %s");
@@ -75,27 +73,11 @@ public class DiscoverWarpsConfig {
         strOptions.put("localisation.help.warp", "To warp to a DiscoverPlate type");
         strOptions.put("localisation.help.buy", "To buy a DiscoverPlate location type");
         strOptions.put("localisation.help.config", "To toggle DiscoverWarps config settings type");
-        strOptions.put("localisation.signs.no_money", "You don't have enough maney to use this sign!");
-        strOptions.put("localisation.signs.needs_discover", "You have not discovered %s yet!");
-        strOptions.put("localisation.signs.sign_made", "Sign set successfully!");
     }
 
     public void checkConfig() {
         int i = 0;
-        // int values
-        for (Map.Entry<String, Integer> entry : intOptions.entrySet()) {
-            if (!config.contains(entry.getKey())) {
-                plugin.getConfig().set(entry.getKey(), entry.getValue());
-                i++;
-            }
-        }
-        // string values
-        for (Map.Entry<String, String> entry : strOptions.entrySet()) {
-            if (!config.contains(entry.getKey())) {
-                plugin.getConfig().set(entry.getKey(), entry.getValue());
-                i++;
-            }
-        }
+
         // boolean values
         for (Map.Entry<String, Boolean> entry : boolOptions.entrySet()) {
             if (!config.contains(entry.getKey())) {
@@ -103,10 +85,29 @@ public class DiscoverWarpsConfig {
                 i++;
             }
         }
+
+        // int values
+        for (Map.Entry<String, Integer> entry : intOptions.entrySet()) {
+            if (!config.contains(entry.getKey())) {
+                plugin.getConfig().set(entry.getKey(), entry.getValue());
+                i++;
+            }
+        }
+
+        // string values
+        for (Map.Entry<String, String> entry : strOptions.entrySet()) {
+            if (!config.contains(entry.getKey())) {
+                plugin.getConfig().set(entry.getKey(), entry.getValue());
+                i++;
+            }
+        }
+
         if (config.getString("localisation.commands.not_plate").equals("You are not standing on a stone pressure plate")) {
             plugin.getConfig().set("localisation.commands.not_plate", "You are not standing on a pressure plate");
         }
+
         plugin.saveConfig();
+
         if (i > 0) {
             System.out.println("[DiscoverWarps] Added " + i + " new items to config");
         }
