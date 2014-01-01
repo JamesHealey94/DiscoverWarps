@@ -10,9 +10,7 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -80,13 +78,6 @@ public class DiscoverWarpsPlateListener implements Listener {
                                 queryDiscover = "INSERT INTO players (player, visited) VALUES ('" + name + "','" + id + "')";
                             }
                             statement.executeUpdate(queryDiscover);
-                            if (plugin.getConfig().getBoolean("xp_on_discover") && !discovered) {
-                                Location loc = p.getLocation();
-                                loc.setX(loc.getBlockX() + 1);
-                                World world = loc.getWorld();
-                                (world.spawn(loc, ExperienceOrb.class)).setExperience(plugin.getConfig().getInt("xp_to_give"));
-                                //p.giveExp(plugin.getConfig().getInt("xp_to_give"));
-                            }
                             if (!discovered) {
                                 p.sendMessage(ChatColor.GOLD + "[" + plugin.getConfig().getString("localisation.plugin_name") + "] " + ChatColor.RESET + String.format(plugin.getConfig().getString("localisation.discovered"), warp));
                             }

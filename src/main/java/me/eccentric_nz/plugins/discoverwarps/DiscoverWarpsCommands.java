@@ -41,7 +41,6 @@ public class DiscoverWarpsCommands implements CommandExecutor {
         admincmds.add("auto");
         admincmds.add("cost");
         admincmds.add("allow_buying");
-        admincmds.add("xp_on_discover");
 
         this.usercmds = new ArrayList<String>();
         usercmds.add("tp");
@@ -87,14 +86,6 @@ public class DiscoverWarpsCommands implements CommandExecutor {
                     if (bool) {
                         sender.sendMessage(plugin_name + String.format(plugin.getConfig().getString("localisation.commands.restart"), plugin_name));
                     }
-                    plugin.saveConfig();
-                    return true;
-                }
-                if (args[0].equalsIgnoreCase("xp_on_discover")) {
-                    final boolean bool = !plugin.getConfig().getBoolean("xp_on_discover");
-                    plugin.getConfig().set("xp_on_discover", bool);
-                    final String boolString = (bool) ? plugin.getConfig().getString("localisation.commands.str_true") : plugin.getConfig().getString("localisation.commands.str_false");
-                    sender.sendMessage(plugin_name + "xp_on_discover " + String.format(plugin.getConfig().getString("localisation.config"), boolString));
                     plugin.saveConfig();
                     return true;
                 }
