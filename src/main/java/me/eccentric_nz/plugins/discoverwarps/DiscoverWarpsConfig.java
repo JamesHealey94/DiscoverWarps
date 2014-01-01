@@ -23,7 +23,6 @@ public class DiscoverWarpsConfig {
         // boolean
         boolOptions.put("no_damage", false);
         boolOptions.put("allow_buying", false);
-        boolOptions.put("debug", false);
         boolOptions.put("localisation.commands.str_true", true);
         boolOptions.put("localisation.commands.str_false", false);
 

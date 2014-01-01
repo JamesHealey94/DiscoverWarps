@@ -27,16 +27,6 @@ public class DiscoverWarps extends JavaPlugin {
     final String MY_PLUGIN_NAME = ChatColor.GOLD + "[DiscoverWarps] " + ChatColor.RESET;
 
     @Override
-    public void onDisable() {
-        this.saveConfig();
-        try {
-            service.connection.close();
-        } catch (Exception e) {
-            debug("Could not close database connection: " + e);
-        }
-    }
-
-    @Override
     public void onEnable() {
         if (!getDataFolder().exists()) {
             if (!getDataFolder().mkdir()) {
@@ -70,6 +60,16 @@ public class DiscoverWarps extends JavaPlugin {
         }
     }
 
+    @Override
+    public void onDisable() {
+        this.saveConfig();
+        try {
+            service.connection.close();
+        } catch (Exception e) {
+            debug("Could not close database connection: " + e);
+        }
+    }
+
     private boolean setupVault() {
         Plugin x = pm.getPlugin("Vault");
         if (x != null && x instanceof Vault) {
@@ -97,9 +97,7 @@ public class DiscoverWarps extends JavaPlugin {
     }
 
     public void debug(Object o) {
-        if (getConfig().getBoolean("debug")) {
-            console.sendMessage("[DiscoverWarps Debug] " + o);
-        }
+        console.sendMessage("[DiscoverWarps Debug] " + o);
     }
 
     private void registerListeners() {

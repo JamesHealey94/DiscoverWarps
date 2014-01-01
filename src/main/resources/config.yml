@@ -1,7 +1,6 @@
 no_damage: false
 no_damage_time: 10
 allow_buying: false
-debug: false
 
 ## do not remove or change '%s' as these are needed to insert the warp names and config options
 localisation:
