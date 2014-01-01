@@ -23,10 +23,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import multiworld.MultiWorldPlugin;
-import multiworld.api.MultiWorldAPI;
-import multiworld.api.MultiWorldWorldData;
-import multiworld.api.flag.FlagName;
 
 public class DiscoverWarpsCommands implements CommandExecutor {
 
@@ -503,13 +499,6 @@ public class DiscoverWarpsCommands implements CommandExecutor {
             MultiverseWorld mvw = mv.getCore().getMVWorldManager().getMVWorld(w);
             GameMode gm = mvw.getGameMode();
             if (gm.equals(GameMode.SURVIVAL)) {
-                bool = true;
-            }
-        }
-        if (plugin.pm.isPluginEnabled("MultiWorld")) {
-            MultiWorldAPI mw = ((MultiWorldPlugin) plugin.pm.getPlugin("MultiWorld")).getApi();
-            MultiWorldWorldData mww = mw.getWorld(w.getName());
-            if (!mww.isOptionSet(FlagName.CREATIVEWORLD)) {
                 bool = true;
             }
         }

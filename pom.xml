@@ -87,11 +87,5 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>multiworld</groupId>
-            <artifactId>MultiWorld</artifactId>
-            <version>5.0.0</version>
-            <type>jar</type>
-        </dependency>
     </dependencies>
 </project>
