@@ -38,7 +38,6 @@ public class DiscoverWarpsCommands implements CommandExecutor {
         admincmds.add("delete");
         admincmds.add("enable");
         admincmds.add("disable");
-        admincmds.add("auto");
         admincmds.add("cost");
         admincmds.add("allow_buying");
 
@@ -62,7 +61,6 @@ public class DiscoverWarpsCommands implements CommandExecutor {
                         + "\n" + plugin.getConfig().getString("localisation.help.delete") + ":\n" + ChatColor.GREEN + "/dw delete [name]" + ChatColor.RESET
                         + "\n" + plugin.getConfig().getString("localisation.help.disable") + ":\n" + ChatColor.GREEN + "/dw disable [name]" + ChatColor.RESET
                         + "\n" + plugin.getConfig().getString("localisation.help.enable") + ":\n" + ChatColor.GREEN + "/dw enable [name]" + ChatColor.RESET
-                        + "\n" + plugin.getConfig().getString("localisation.help.auto") + ":\n" + ChatColor.GREEN + "/dw auto [name]" + ChatColor.RESET
                         + "\n" + plugin.getConfig().getString("localisation.help.cost") + ":\n" + ChatColor.GREEN + "/dw cost [name] [amount]" + ChatColor.RESET
                         + "\n" + plugin.getConfig().getString("localisation.help.list") + ":\n" + ChatColor.GREEN + "/dw list" + ChatColor.RESET
                         + "\n" + plugin.getConfig().getString("localisation.help.warp") + ":\n" + ChatColor.GREEN + "/dw tp [name]" + ChatColor.RESET
@@ -201,28 +199,6 @@ public class DiscoverWarpsCommands implements CommandExecutor {
                         plugin.debug("Could not disable discover plate, " + e);
                     }
                 }
-                if (args[0].equalsIgnoreCase("auto")) {
-                    try {
-                        final Connection connection = service.getConnection();
-                        final Statement statement = connection.createStatement();
-                        final String queryAuto = "SELECT name, auto FROM discoverwarps WHERE name = '" + args[1] + "'";
-                        final ResultSet rsAuto = statement.executeQuery(queryAuto);
-                        // check name is valid
-                        if (rsAuto.next()) {
-                            final int auto = (rsAuto.getInt("auto") == 1) ? 0 : 1;
-                            final String bool = (auto == 1) ? plugin.getConfig().getString("localisation.commands.str_true") : plugin.getConfig().getString("localisation.commands.str_false");
-                            final String queryDel = "UPDATE discoverwarps SET auto = " + auto + " WHERE name = '" + args[1] + "'";
-                            statement.executeUpdate(queryDel);
-                            sender.sendMessage(plugin_name + String.format(plugin.getConfig().getString("localisation.commands.auto_discover"), args[1]) + " " + bool + "!");
-                            return true;
-                        } else {
-                            sender.sendMessage(plugin_name + plugin.getConfig().getString("localisation.commands.no_plate_name"));
-                            return true;
-                        }
-                    } catch (SQLException e) {
-                        plugin.debug("Could not set auto discover plate option, " + e);
-                    }
-                }
                 if (args[0].equalsIgnoreCase("cost")) {
                     try {
                         final Connection connection = service.getConnection();
@@ -271,7 +247,7 @@ public class DiscoverWarpsCommands implements CommandExecutor {
                                 visited = Arrays.asList(rsVisited.getString("visited").split(","));
                             }
                         }
-                        final String queryList = "SELECT id, name, auto, cost FROM discoverwarps WHERE enabled = 1";
+                        final String queryList = "SELECT id, name, cost FROM discoverwarps WHERE enabled = 1";
                         final ResultSet rsList = statement.executeQuery(queryList);
                         // check name is valid
                         if (rsList.isBeforeFirst()) {
@@ -280,7 +256,6 @@ public class DiscoverWarpsCommands implements CommandExecutor {
                             String discovered;
                             for (int i = 1; rsList.next(); i++) {
                                 discovered = (visited.contains(rsList.getString("id"))) ? ChatColor.GREEN + plugin.getConfig().getString("localisation.visited") : ChatColor.RED + plugin.getConfig().getString("localisation.not_visited");
-                                final String status = (rsList.getBoolean("auto")) ? ChatColor.BLUE + plugin.getConfig().getString("localisation.auto") : discovered;
                                 final String warp = rsList.getString("name");
                                 String cost = "";
                                 if (plugin.getConfig().getBoolean("allow_buying") && !visited.contains(rsList.getString("id"))) {
@@ -289,7 +264,7 @@ public class DiscoverWarpsCommands implements CommandExecutor {
                                         cost = ChatColor.RESET + " [" + plugin.economy.format(amount) + "]";
                                     }
                                 }
-                                sender.sendMessage(i + ". " + warp + " " + status + cost);
+                                sender.sendMessage(i + ". " + warp + " " + discovered + cost);
                             }
                             sender.sendMessage("------------");
                             return true;
@@ -326,7 +301,6 @@ public class DiscoverWarpsCommands implements CommandExecutor {
                             final int x = rsName.getInt("x");
                             final int y = rsName.getInt("y");
                             final int z = rsName.getInt("z");
-                            final boolean auto = rsName.getBoolean("auto");
                             List<String> visited = new ArrayList<String>();
                             // can the player tp to here?
                             final String p = player.getName();
@@ -336,7 +310,7 @@ public class DiscoverWarpsCommands implements CommandExecutor {
                             if (rsVisited.isBeforeFirst()) {
                                 visited = Arrays.asList(rsVisited.getString("visited").split(","));
                             }
-                            if (!visited.contains(id) && !auto) {
+                            if (!visited.contains(id)) {
                                 sender.sendMessage(plugin_name + String.format(plugin.getConfig().getString("localisation.commands.needs_discover"), warp));
                                 return true;
                             }
@@ -371,34 +345,34 @@ public class DiscoverWarpsCommands implements CommandExecutor {
                         return false;
                     }
                     try {
-                        Connection connection = service.getConnection();
-                        Statement statement = connection.createStatement();
-                        String queryBuy = "SELECT * FROM discoverwarps WHERE name = '" + args[1] + "'";
-                        ResultSet rsBuy = statement.executeQuery(queryBuy);
+                        final Connection connection = service.getConnection();
+                        final Statement statement = connection.createStatement();
+                        final String queryBuy = "SELECT * FROM discoverwarps WHERE name = '" + args[1] + "'";
+                        final ResultSet rsBuy = statement.executeQuery(queryBuy);
                         // check name is valid
                         if (rsBuy.next()) {
                             boolean firstplate = true;
-                            double cost = rsBuy.getDouble("cost");
+                            final double cost = rsBuy.getDouble("cost");
                             if (cost <= 0) {
                                 sender.sendMessage(plugin_name + String.format(plugin.getConfig().getString("localisation.buying.cannot_buy"), args[1]));
                                 return true;
                             }
-                            String p = player.getName();
+                            final String p = player.getName();
                             // check they have sufficient balance
-                            double bal = plugin.economy.getBalance(p);
+                            final double bal = plugin.economy.getBalance(p);
                             if (cost > bal) {
                                 player.sendMessage(plugin_name + plugin.getConfig().getString("localisation.buying.no_money"));
                                 return true;
                             }
-                            String id = rsBuy.getString("id");
+                            final String id = rsBuy.getString("id");
                             String queryDiscover = "";
                             // check whether they have visited this plate before
-                            String queryPlayer = "SELECT * FROM players WHERE player = '" + p + "'";
-                            ResultSet rsPlayer = statement.executeQuery(queryPlayer);
+                            final String queryPlayer = "SELECT * FROM players WHERE player = '" + p + "'";
+                            final ResultSet rsPlayer = statement.executeQuery(queryPlayer);
                             if (rsPlayer.next()) {
                                 firstplate = false;
-                                String data = rsPlayer.getString("visited");
-                                String[] visited = data.split(",");
+                                final String data = rsPlayer.getString("visited");
+                                final String[] visited = data.split(",");
                                 if (Arrays.asList(visited).contains(id)) {
                                     sender.sendMessage(plugin_name + String.format(plugin.getConfig().getString("localisation.buying.no_need"), args[1]));
                                     return true;

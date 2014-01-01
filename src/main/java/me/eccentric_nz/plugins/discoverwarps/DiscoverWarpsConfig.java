@@ -43,7 +43,6 @@ public class DiscoverWarpsConfig {
         strOptions.put("localisation.commands.none_set", "There are no DiscoverPlates to find!");
         strOptions.put("localisation.commands.no_warp_name", "You need to supply a warp name!");
         strOptions.put("localisation.commands.needs_discover", "You need to discover %s before you can teleport to it!");
-        strOptions.put("localisation.commands.auto_discover", "DiscoverPlate %s auto-discovery is");
         strOptions.put("localisation.commands.added", "DiscoverPlate %s added!");
         strOptions.put("localisation.commands.enabled", "DiscoverPlate %s enabled!");
         strOptions.put("localisation.commands.disabled", "DiscoverPlate %s disabled!");
@@ -58,13 +57,11 @@ public class DiscoverWarpsConfig {
         strOptions.put("localisation.list", "List");
         strOptions.put("localisation.visited", "VISITED");
         strOptions.put("localisation.not_visited", "NOT VISITED");
-        strOptions.put("localisation.auto", "AUTO");
         strOptions.put("localisation.no_break", "You cannot break this pressure plate, use %s to remove it.");
         strOptions.put("localisation.help.set", "To set a stone or wood pressure plate as a DiscoverPlate, stand on it and then type");
         strOptions.put("localisation.help.delete", "To delete a DiscoverPlate type");
         strOptions.put("localisation.help.disable", "To disable a DiscoverPlate type");
         strOptions.put("localisation.help.enable", "To enable a DiscoverPlate type");
-        strOptions.put("localisation.help.auto", "To make a DiscoverPlate auto-discovered type");
         strOptions.put("localisation.help.cost", "To set a cost to buy a DiscoverPlate location type");
         strOptions.put("localisation.help.list", "To list DiscoverPlates type");
         strOptions.put("localisation.help.warp", "To warp to a DiscoverPlate type");

@@ -20,7 +20,6 @@ localisation:
     none_set: There are no DiscoverPlates to find!
     no_warp_name: You need to supply a warp name!
     needs_discover: You need to discover %s before you can teleport to it!
-    auto_discover: DiscoverPlate %s auto-discovery is
     added: DiscoverPlate %s added!
     enabled: DiscoverPlate %s enabled!
     disabled: DiscoverPlate %s disabled!
@@ -40,7 +39,6 @@ localisation:
   list: List
   visited: VISITED
   not_visited: NOT VISITED
-  auto: AUTO
   no_break: You cannot break this pressure plate, use %s to remove it.
   ## help messages
   help:
@@ -48,7 +46,6 @@ localisation:
     delete: To delete a DiscoverPlate type
     disable: To disable a DiscoverPlate type
     enable: To enable a DiscoverPlate type
-    auto: To make a DiscoverPlate auto-discovered type
     cost: To set a cost to buy a DiscoverPlate location type
     list: To list DiscoverPlates type
     warp: To warp to a DiscoverPlate type
