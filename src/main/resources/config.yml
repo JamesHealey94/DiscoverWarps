@@ -1,3 +1,11 @@
+no_damage: false
+no_damage_time: 10
+allow_buying: false
+xp_on_discover: false
+xp_to_give: 3
+sign: discoverwarp
+debug: false
+
 ## do not remove or change '%s' as these are needed to insert the warp names and config options
 localisation:
   plugin_name: DiscoverWarps
@@ -56,10 +64,3 @@ localisation:
     no_money: You don't have enough maney to use this sign!
     needs_discover: You have not discovered %s yet!
     sign_made: Sign set successfully!
-no_damage: false
-no_damage_time: 10
-allow_buying: false
-xp_on_discover: false
-xp_to_give: 3
-sign: discoverwarp
-debug: false
