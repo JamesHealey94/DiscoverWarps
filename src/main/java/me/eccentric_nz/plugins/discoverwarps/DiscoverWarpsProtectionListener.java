@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,9 +18,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 public class DiscoverWarpsProtectionListener implements Listener {
 
-    private DiscoverWarps plugin;
-    DiscoverWarpsDatabase service = DiscoverWarpsDatabase.getInstance();
-    List<Material> validBlocks = new ArrayList<Material>();
+    private final DiscoverWarps plugin;
+    private final DiscoverWarpsDatabase service = DiscoverWarpsDatabase.getInstance();
+    private final List<Material> validBlocks = new ArrayList<Material>();
 
     public DiscoverWarpsProtectionListener(DiscoverWarps plugin) {
         this.plugin = plugin;
@@ -31,26 +30,26 @@ public class DiscoverWarpsProtectionListener implements Listener {
 
     @EventHandler
     public void onPlateBreak(BlockBreakEvent event) {
-        Block b = event.getBlock();
-        Material m = b.getType();
+        final Block b = event.getBlock();
+        final Material m = b.getType();
         if (validBlocks.contains(m) || validBlocks.contains(b.getRelative(BlockFace.UP).getType())) {
-            Location l = b.getLocation();
-            String w = l.getWorld().getName();
-            int x = l.getBlockX();
+            final Location l = b.getLocation();
+            final String w = l.getWorld().getName();
+            final int x = l.getBlockX();
             int y = l.getBlockY();
             if (validBlocks.contains(b.getRelative(BlockFace.UP).getType())) {
                 y += 1;
             }
-            int z = l.getBlockZ();
+            final int z = l.getBlockZ();
             Statement statement = null;
             ResultSet rsPlate = null;
             try {
-                Connection connection = service.getConnection();
+                final Connection connection = service.getConnection();
                 statement = connection.createStatement();
-                String getQuery = "SELECT name FROM discoverwarps WHERE world = '" + w + "' AND x = " + x + " AND y = " + y + " AND z = " + z;
+                final String getQuery = "SELECT name FROM discoverwarps WHERE world = '" + w + "' AND x = " + x + " AND y = " + y + " AND z = " + z;
                 rsPlate = statement.executeQuery(getQuery);
                 if (rsPlate.isBeforeFirst()) {
-                    Player p = event.getPlayer();
+                    final Player p = event.getPlayer();
                     p.sendMessage(ChatColor.GOLD + "[" + plugin.getConfig().getString("localisation.plugin_name") + "] " + ChatColor.RESET + String.format(plugin.getConfig().getString("localisation.no_break"), ChatColor.GREEN + "/dw delete [name]" + ChatColor.RESET));
                     event.setCancelled(true);
                 }
@@ -65,7 +64,6 @@ public class DiscoverWarpsProtectionListener implements Listener {
                 }
                 if (statement != null) {
                     try {
-
                         statement.close();
                     } catch (Exception e) {
                     }

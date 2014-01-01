@@ -11,14 +11,15 @@ public class DiscoverWarpsConfig {
     private final DiscoverWarps plugin;
     private FileConfiguration config = null;
     private File configFile = null;
-    HashMap<String, String> strOptions = new HashMap<String, String>();
-    HashMap<String, Integer> intOptions = new HashMap<String, Integer>();
-    HashMap<String, Boolean> boolOptions = new HashMap<String, Boolean>();
+    private HashMap<String, String> strOptions = new HashMap<String, String>();
+    private HashMap<String, Integer> intOptions = new HashMap<String, Integer>();
+    private HashMap<String, Boolean> boolOptions = new HashMap<String, Boolean>();
 
     public DiscoverWarpsConfig(DiscoverWarps plugin) {
         this.plugin = plugin;
         this.configFile = new File(plugin.getDataFolder(), "config.yml");
         this.config = YamlConfiguration.loadConfiguration(configFile);
+
         // boolean
         boolOptions.put("no_damage", false);
         boolOptions.put("allow_buying", false);
@@ -26,9 +27,11 @@ public class DiscoverWarpsConfig {
         boolOptions.put("debug", false);
         boolOptions.put("localisation.commands.str_true", true);
         boolOptions.put("localisation.commands.str_false", false);
+
         // integer
         intOptions.put("no_damage_time", 10);
         intOptions.put("xp_to_give", 3);
+
         // string
         strOptions.put("sign", "discoverwarp");
         strOptions.put("localisation.plugin_name", "DiscoverWarps");

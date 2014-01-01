@@ -7,7 +7,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -22,9 +21,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class DiscoverWarpsPlateListener implements Listener {
 
-    DiscoverWarps plugin;
-    DiscoverWarpsDatabase service = DiscoverWarpsDatabase.getInstance();
-    List<Material> validBlocks = new ArrayList<Material>();
+    final DiscoverWarps plugin;
+    final DiscoverWarpsDatabase service = DiscoverWarpsDatabase.getInstance();
+    final List<Material> validBlocks = new ArrayList<Material>();
 
     public DiscoverWarpsPlateListener(DiscoverWarps plugin) {
         this.plugin = plugin;
@@ -34,42 +33,42 @@ public class DiscoverWarpsPlateListener implements Listener {
 
     @EventHandler
     public void onPlateStep(PlayerInteractEvent event) {
-        Action a = event.getAction();
-        Block b = event.getClickedBlock();
+        final Action a = event.getAction();
+        final Block b = event.getClickedBlock();
         if (a.equals(Action.PHYSICAL) && validBlocks.contains(b.getType())) {
-            Player p = event.getPlayer();
-            String name = p.getName();
+            final Player p = event.getPlayer();
+            final String name = p.getName();
             if (p.hasPermission("discoverwarps.use")) {
-                Location l = b.getLocation();
-                String w = l.getWorld().getName();
-                int x = l.getBlockX();
-                int y = l.getBlockY();
-                int z = l.getBlockZ();
+                final Location l = b.getLocation();
+                final String w = l.getWorld().getName();
+                final int x = l.getBlockX();
+                final int y = l.getBlockY();
+                final int z = l.getBlockZ();
                 boolean discovered = false;
                 boolean firstplate = true;
                 Statement statement = null;
                 ResultSet rsPlate = null;
                 ResultSet rsPlayer = null;
                 try {
-                    Connection connection = service.getConnection();
+                    final Connection connection = service.getConnection();
                     statement = connection.createStatement();
                     // get their current gamemode inventory from database
-                    String getQuery = "SELECT * FROM discoverwarps WHERE world = '" + w + "' AND x = " + x + " AND y = " + y + " AND z = " + z;
+                    final String getQuery = "SELECT * FROM discoverwarps WHERE world = '" + w + "' AND x = " + x + " AND y = " + y + " AND z = " + z;
                     rsPlate = statement.executeQuery(getQuery);
                     if (rsPlate.next()) {
                         // is a discoverplate
-                        boolean enabled = rsPlate.getBoolean("enabled");
+                        final boolean enabled = rsPlate.getBoolean("enabled");
                         if (enabled) {
-                            String id = rsPlate.getString("id");
-                            String warp = rsPlate.getString("name");
+                            final String id = rsPlate.getString("id");
+                            final String warp = rsPlate.getString("name");
                             String queryDiscover = "";
                             // check whether they have visited this plate before
-                            String queryPlayer = "SELECT * FROM players WHERE player = '" + name + "'";
+                            final String queryPlayer = "SELECT * FROM players WHERE player = '" + name + "'";
                             rsPlayer = statement.executeQuery(queryPlayer);
                             if (rsPlayer.next()) {
                                 firstplate = false;
-                                String data = rsPlayer.getString("visited");
-                                String[] visited = data.split(",");
+                                final String data = rsPlayer.getString("visited");
+                                final String[] visited = data.split(",");
                                 if (Arrays.asList(visited).contains(id)) {
                                     discovered = true;
                                 }
@@ -77,18 +76,18 @@ public class DiscoverWarpsPlateListener implements Listener {
                                     queryDiscover = "UPDATE players SET visited = '" + data + "," + id + "' WHERE player = '" + name + "'";
                                 }
                             }
-                            if (discovered == false && firstplate == true) {
+                            if (!discovered && firstplate) {
                                 queryDiscover = "INSERT INTO players (player, visited) VALUES ('" + name + "','" + id + "')";
                             }
                             statement.executeUpdate(queryDiscover);
-                            if (plugin.getConfig().getBoolean("xp_on_discover") && discovered == false) {
+                            if (plugin.getConfig().getBoolean("xp_on_discover") && !discovered) {
                                 Location loc = p.getLocation();
                                 loc.setX(loc.getBlockX() + 1);
                                 World world = loc.getWorld();
-                                ((ExperienceOrb) world.spawn(loc, ExperienceOrb.class)).setExperience(plugin.getConfig().getInt("xp_to_give"));
+                                (world.spawn(loc, ExperienceOrb.class)).setExperience(plugin.getConfig().getInt("xp_to_give"));
                                 //p.giveExp(plugin.getConfig().getInt("xp_to_give"));
                             }
-                            if (discovered == false) {
+                            if (!discovered) {
                                 p.sendMessage(ChatColor.GOLD + "[" + plugin.getConfig().getString("localisation.plugin_name") + "] " + ChatColor.RESET + String.format(plugin.getConfig().getString("localisation.discovered"), warp));
                             }
                             rsPlayer.close();
@@ -113,7 +112,6 @@ public class DiscoverWarpsPlateListener implements Listener {
                     }
                     if (statement != null) {
                         try {
-
                             statement.close();
                         } catch (Exception e) {
                         }

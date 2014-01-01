@@ -20,9 +20,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class DiscoverWarpsSignListener implements Listener {
 
-    DiscoverWarps plugin;
-    DiscoverWarpsDatabase service = DiscoverWarpsDatabase.getInstance();
-    String plugin_name;
+    private final DiscoverWarps plugin;
+    private final DiscoverWarpsDatabase service = DiscoverWarpsDatabase.getInstance();
+    private final String plugin_name;
 
     public DiscoverWarpsSignListener(DiscoverWarps plugin) {
         this.plugin = plugin;
@@ -31,45 +31,45 @@ public class DiscoverWarpsSignListener implements Listener {
 
     @EventHandler
     public void onSignClick(PlayerInteractEvent event) {
-        Action a = event.getAction();
-        Block b = event.getClickedBlock();
+        final Action a = event.getAction();
+        final Block b = event.getClickedBlock();
         if (a.equals(Action.RIGHT_CLICK_BLOCK) && (b.getType().equals(Material.WALL_SIGN) || b.getType().equals(Material.SIGN_POST))) {
-            Sign s = (Sign) b.getState();
+            final Sign s = (Sign) b.getState();
             if (s.getLine(0).equalsIgnoreCase("[" + plugin.getConfig().getString("sign") + "]")) {
-                Player p = event.getPlayer();
-                String name = p.getName();
+                final Player p = event.getPlayer();
+                final String name = p.getName();
                 if (p.hasPermission("discoverwarps.use")) {
-                    String plate = s.getLine(1);
+                    final String plate = s.getLine(1);
                     Statement statement = null;
                     ResultSet rsPlate = null;
                     ResultSet rsPlayer = null;
                     try {
-                        Connection connection = service.getConnection();
+                        final Connection connection = service.getConnection();
                         statement = connection.createStatement();
                         // get their current gamemode inventory from database
-                        String getQuery = "SELECT * FROM discoverwarps WHERE name = '" + plate + "'";
+                        final String getQuery = "SELECT * FROM discoverwarps WHERE name = '" + plate + "'";
                         rsPlate = statement.executeQuery(getQuery);
                         if (rsPlate.next()) {
                             // is a discoverplate
-                            boolean enabled = rsPlate.getBoolean("enabled");
+                            final boolean enabled = rsPlate.getBoolean("enabled");
                             if (enabled) {
-                                String id = rsPlate.getString("id");
-                                String warp = rsPlate.getString("name");
-                                World w = plugin.getServer().getWorld(rsPlate.getString("world"));
-                                int x = rsPlate.getInt("x");
-                                int y = rsPlate.getInt("y");
-                                int z = rsPlate.getInt("z");
-                                double cost = rsPlate.getDouble("cost");
+                                final String id = rsPlate.getString("id");
+                                final String warp = rsPlate.getString("name");
+                                final World w = plugin.getServer().getWorld(rsPlate.getString("world"));
+                                final int x = rsPlate.getInt("x");
+                                final int y = rsPlate.getInt("y");
+                                final int z = rsPlate.getInt("z");
+                                final double cost = rsPlate.getDouble("cost");
                                 String queryDiscover = "";
                                 // check whether they have visited this plate before
-                                String queryPlayer = "SELECT * FROM players WHERE player = '" + name + "'";
+                                final String queryPlayer = "SELECT * FROM players WHERE player = '" + name + "'";
                                 rsPlayer = statement.executeQuery(queryPlayer);
                                 boolean firstplate = true;
                                 boolean discovered = false;
                                 if (rsPlayer.next()) {
                                     firstplate = false;
-                                    String data = rsPlayer.getString("visited");
-                                    String[] visited = data.split(",");
+                                    final String data = rsPlayer.getString("visited");
+                                    final String[] visited = data.split(",");
                                     if (Arrays.asList(visited).contains(id)) {
                                         discovered = true;
                                     }
@@ -95,10 +95,10 @@ public class DiscoverWarpsSignListener implements Listener {
                                 }
                                 statement.executeUpdate(queryDiscover);
                                 // warp to location
-                                Location l = new Location(w, x, y, z);
+                                final Location l = new Location(w, x, y, z);
                                 l.setPitch(p.getLocation().getPitch());
                                 l.setYaw(p.getLocation().getYaw());
-                                DiscoverWarpsCommands dwc = new DiscoverWarpsCommands(plugin);
+                                final DiscoverWarpsCommands dwc = new DiscoverWarpsCommands(plugin);
                                 dwc.movePlayer(p, l, p.getLocation().getWorld());
                                 if (discovered == false) {
                                     p.sendMessage(plugin_name + String.format(plugin.getConfig().getString("localisation.discovered"), warp));
@@ -137,26 +137,26 @@ public class DiscoverWarpsSignListener implements Listener {
 
     @EventHandler
     public void onSignChange(SignChangeEvent event) {
-        String line1 = event.getLine(0);
-        String firstline = "[" + plugin.getConfig().getString("sign") + "]";
+        final String line1 = event.getLine(0);
+        final String firstline = "[" + plugin.getConfig().getString("sign") + "]";
         if (line1.equalsIgnoreCase(firstline)) {
-            Player player = event.getPlayer();
+            final Player player = event.getPlayer();
             if (player.hasPermission("discoverwarps.admin")) {
-                String line2 = event.getLine(1);
+                final String line2 = event.getLine(1);
                 Statement statement = null;
                 ResultSet rsPlate = null;
                 try {
-                    Connection connection = service.getConnection();
+                    final Connection connection = service.getConnection();
                     statement = connection.createStatement();
                     // get their current gamemode inventory from database
-                    String getQuery = "SELECT * FROM discoverwarps WHERE name = '" + line2 + "'";
+                    final String getQuery = "SELECT * FROM discoverwarps WHERE name = '" + line2 + "'";
                     rsPlate = statement.executeQuery(getQuery);
                     if (!rsPlate.next()) {
                         player.sendMessage(plugin_name + plugin.getConfig().getString("localisation.commands.no_plate_name"));
                         event.setCancelled(true);
                         return;
                     }
-                    double cost = rsPlate.getDouble("cost");
+                    final double cost = rsPlate.getDouble("cost");
                     if (cost > 0) {
                         event.setLine(2, "" + cost);
                     }

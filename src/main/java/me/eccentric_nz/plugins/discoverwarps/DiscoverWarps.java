@@ -2,31 +2,31 @@ package me.eccentric_nz.plugins.discoverwarps;
 
 import java.io.File;
 import java.io.IOException;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import net.milkbowl.vault.Vault;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class DiscoverWarps extends JavaPlugin {
 
-    DiscoverWarpsDatabase service = DiscoverWarpsDatabase.getInstance();
+    private final DiscoverWarpsDatabase service = DiscoverWarpsDatabase.getInstance();
     private DiscoverWarpsCommands commando;
-    PluginManager pm = Bukkit.getServer().getPluginManager();
-    DiscoverWarpsPlateListener plateListener;
-    DiscoverWarpsProtectionListener protectionListener;
-    DiscoverWarpsExplodeListener explodeListener;
-    DiscoverWarpsSignListener signListener;
+    private final PluginManager pm = Bukkit.getServer().getPluginManager();
+    private DiscoverWarpsPlateListener plateListener;
+    private DiscoverWarpsProtectionListener protectionListener;
+    private DiscoverWarpsExplodeListener explodeListener;
+    private DiscoverWarpsSignListener signListener;
     private Vault vault;
     public Economy economy;
     private FileConfiguration config = null;
-    ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-    String MY_PLUGIN_NAME = ChatColor.GOLD + "[DiscoverWarps] " + ChatColor.RESET;
+    final ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+    final String MY_PLUGIN_NAME = ChatColor.GOLD + "[DiscoverWarps] " + ChatColor.RESET;
 
     @Override
     public void onDisable() {
@@ -105,7 +105,7 @@ public class DiscoverWarps extends JavaPlugin {
     }
 
     public void debug(Object o) {
-        if (getConfig().getBoolean("debug") == true) {
+        if (getConfig().getBoolean("debug")) {
             console.sendMessage("[DiscoverWarps Debug] " + o);
         }
     }
