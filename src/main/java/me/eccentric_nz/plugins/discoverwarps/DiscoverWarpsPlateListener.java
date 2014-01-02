@@ -55,36 +55,33 @@ public class DiscoverWarpsPlateListener implements Listener {
                     rsPlate = statement.executeQuery(getQuery);
                     if (rsPlate.next()) {
                         // is a discoverplate
-                        final boolean enabled = rsPlate.getBoolean("enabled");
-                        if (enabled) {
-                            final String id = rsPlate.getString("id");
-                            final String warp = rsPlate.getString("name");
-                            String queryDiscover = "";
-                            // check whether they have visited this plate before
-                            final String queryPlayer = "SELECT * FROM players WHERE player = '" + name + "'";
-                            rsPlayer = statement.executeQuery(queryPlayer);
-                            if (rsPlayer.next()) {
-                                firstplate = false;
-                                final String data = rsPlayer.getString("visited");
-                                final String[] visited = data.split(",");
-                                if (Arrays.asList(visited).contains(id)) {
-                                    discovered = true;
-                                }
-                                if (discovered == false) {
-                                    queryDiscover = "UPDATE players SET visited = '" + data + "," + id + "' WHERE player = '" + name + "'";
-                                }
+                        final String id = rsPlate.getString("id");
+                        final String warp = rsPlate.getString("name");
+                        String queryDiscover = "";
+                        // check whether they have visited this plate before
+                        final String queryPlayer = "SELECT * FROM players WHERE player = '" + name + "'";
+                        rsPlayer = statement.executeQuery(queryPlayer);
+                        if (rsPlayer.next()) {
+                            firstplate = false;
+                            final String data = rsPlayer.getString("visited");
+                            final String[] visited = data.split(",");
+                            if (Arrays.asList(visited).contains(id)) {
+                                discovered = true;
                             }
-                            if (!discovered && firstplate) {
-                                queryDiscover = "INSERT INTO players (player, visited) VALUES ('" + name + "','" + id + "')";
+                            if (discovered == false) {
+                                queryDiscover = "UPDATE players SET visited = '" + data + "," + id + "' WHERE player = '" + name + "'";
                             }
-                            statement.executeUpdate(queryDiscover);
-                            if (!discovered) {
-                                p.sendMessage(ChatColor.GOLD + "[" + plugin.getConfig().getString("localisation.plugin_name") + "] " + ChatColor.RESET + String.format(plugin.getConfig().getString("localisation.discovered"), warp));
-                            }
-                            rsPlayer.close();
-                            rsPlate.close();
-                            statement.close();
                         }
+                        if (!discovered && firstplate) {
+                            queryDiscover = "INSERT INTO players (player, visited) VALUES ('" + name + "','" + id + "')";
+                        }
+                        statement.executeUpdate(queryDiscover);
+                        if (!discovered) {
+                            p.sendMessage(ChatColor.GOLD + "[" + plugin.getConfig().getString("localisation.plugin_name") + "] " + ChatColor.RESET + String.format(plugin.getConfig().getString("localisation.discovered"), warp));
+                        }
+                        rsPlayer.close();
+                        rsPlate.close();
+                        statement.close();
                     }
                 } catch (SQLException e) {
                     plugin.debug("Could not update player's visited data, " + e);

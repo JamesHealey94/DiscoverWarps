@@ -36,8 +36,6 @@ public class DiscoverWarpsCommands implements CommandExecutor {
         this.admincmds = new ArrayList<String>();
         admincmds.add("set");
         admincmds.add("delete");
-        admincmds.add("enable");
-        admincmds.add("disable");
 
         this.usercmds = new ArrayList<String>();
         usercmds.add("tp");
@@ -57,8 +55,6 @@ public class DiscoverWarpsCommands implements CommandExecutor {
                 final String HELP
                         = plugin.getConfig().getString("localisation.help.set") + ":\n" + ChatColor.GREEN + "/dw set [name]" + ChatColor.RESET
                         + "\n" + plugin.getConfig().getString("localisation.help.delete") + ":\n" + ChatColor.GREEN + "/dw delete [name]" + ChatColor.RESET
-                        + "\n" + plugin.getConfig().getString("localisation.help.disable") + ":\n" + ChatColor.GREEN + "/dw disable [name]" + ChatColor.RESET
-                        + "\n" + plugin.getConfig().getString("localisation.help.enable") + ":\n" + ChatColor.GREEN + "/dw enable [name]" + ChatColor.RESET
                         + "\n" + plugin.getConfig().getString("localisation.help.list") + ":\n" + ChatColor.GREEN + "/dw list" + ChatColor.RESET
                         + "\n" + plugin.getConfig().getString("localisation.help.warp") + ":\n" + ChatColor.GREEN + "/dw tp [name]" + ChatColor.RESET
                         + "\n" + plugin.getConfig().getString("localisation.help.buy") + ":\n" + ChatColor.GREEN + "/dw buy [name]" + ChatColor.RESET;
@@ -102,7 +98,7 @@ public class DiscoverWarpsCommands implements CommandExecutor {
                             final int x = b.getLocation().getBlockX();
                             final int y = b.getLocation().getBlockY();
                             final int z = b.getLocation().getBlockZ();
-                            final PreparedStatement ps = connection.prepareStatement("INSERT INTO discoverwarps (name, world, x, y, z, enabled) VALUES (?, ?, ?, ?, ?, 1)");
+                            final PreparedStatement ps = connection.prepareStatement("INSERT INTO discoverwarps (name, world, x, y, z) VALUES (?, ?, ?, ?, ?)");
                             ps.setString(1, args[1]);
                             ps.setString(2, w);
                             ps.setInt(3, x);
@@ -144,46 +140,6 @@ public class DiscoverWarpsCommands implements CommandExecutor {
                         plugin.debug("Could not delete discover plate, " + e);
                     }
                 }
-                if (args[0].equalsIgnoreCase("enable")) {
-                    try {
-                        final Connection connection = service.getConnection();
-                        final Statement statement = connection.createStatement();
-                        final String queryName = "SELECT name FROM discoverwarps WHERE name = '" + args[1] + "'";
-                        final ResultSet rsName = statement.executeQuery(queryName);
-                        // check name is valid
-                        if (rsName.isBeforeFirst()) {
-                            final String queryDel = "UPDATE discoverwarps SET enabled = 1 WHERE name = '" + args[1] + "'";
-                            statement.executeUpdate(queryDel);
-                            sender.sendMessage(plugin_name + String.format(plugin.getConfig().getString("localisation.commands.enabled"), args[1]));
-                            return true;
-                        } else {
-                            sender.sendMessage(plugin_name + plugin.getConfig().getString("localisation.commands.no_plate_name"));
-                            return true;
-                        }
-                    } catch (SQLException e) {
-                        plugin.debug("Could not enable discover plate, " + e);
-                    }
-                }
-                if (args[0].equalsIgnoreCase("disable")) {
-                    try {
-                        final Connection connection = service.getConnection();
-                        final Statement statement = connection.createStatement();
-                        final String queryName = "SELECT name FROM discoverwarps WHERE name = '" + args[1] + "'";
-                        final ResultSet rsName = statement.executeQuery(queryName);
-                        // check name is valid
-                        if (rsName.isBeforeFirst()) {
-                            final String queryDel = "UPDATE discoverwarps SET enabled = 0 WHERE name = '" + args[1] + "'";
-                            statement.executeUpdate(queryDel);
-                            sender.sendMessage(plugin_name + String.format(plugin.getConfig().getString("localisation.commands.disabled"), args[1]));
-                            return true;
-                        } else {
-                            sender.sendMessage(plugin_name + plugin.getConfig().getString("localisation.commands.no_plate_name"));
-                            return true;
-                        }
-                    } catch (SQLException e) {
-                        plugin.debug("Could not disable discover plate, " + e);
-                    }
-                }
             }
             if (usercmds.contains(args[0])) {
                 if (!sender.hasPermission("discoverwarps.use")) {
@@ -205,7 +161,7 @@ public class DiscoverWarpsCommands implements CommandExecutor {
                                 visited = Arrays.asList(rsVisited.getString("visited").split(","));
                             }
                         }
-                        final String queryList = "SELECT id, name FROM discoverwarps WHERE enabled = 1";
+                        final String queryList = "SELECT id, name FROM discoverwarps";
                         final ResultSet rsList = statement.executeQuery(queryList);
                         // check name is valid
                         if (rsList.isBeforeFirst()) {

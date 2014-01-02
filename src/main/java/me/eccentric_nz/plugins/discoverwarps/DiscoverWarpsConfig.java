@@ -42,8 +42,6 @@ public class DiscoverWarpsConfig {
         strOptions.put("localisation.commands.no_warp_name", "You need to supply a warp name!");
         strOptions.put("localisation.commands.needs_discover", "You need to discover %s before you can teleport to it!");
         strOptions.put("localisation.commands.added", "DiscoverPlate %s added!");
-        strOptions.put("localisation.commands.enabled", "DiscoverPlate %s enabled!");
-        strOptions.put("localisation.commands.disabled", "DiscoverPlate %s disabled!");
         strOptions.put("localisation.commands.deleted", "DiscoverPlate %s deleted!");
         //strOptions.put("localisation.commands.restart", "A server restart will be needed in order to hook %s into your economy plugin"); TODO update to permissions once rest of plugin is updated
         strOptions.put("localisation.buying.no_buying", "You are not allowed to buy DiscoverWarps on this server!");
@@ -58,8 +56,6 @@ public class DiscoverWarpsConfig {
         strOptions.put("localisation.no_break", "You cannot break this pressure plate, use %s to remove it.");
         strOptions.put("localisation.help.set", "To set a stone or wood pressure plate as a DiscoverPlate, stand on it and then type");
         strOptions.put("localisation.help.delete", "To delete a DiscoverPlate type");
-        strOptions.put("localisation.help.disable", "To disable a DiscoverPlate type");
-        strOptions.put("localisation.help.enable", "To enable a DiscoverPlate type");
         strOptions.put("localisation.help.list", "To list DiscoverPlates type");
         strOptions.put("localisation.help.warp", "To warp to a DiscoverPlate type");
         strOptions.put("localisation.help.buy", "To buy a DiscoverPlate location type");

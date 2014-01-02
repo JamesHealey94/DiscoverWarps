@@ -5,7 +5,7 @@ main: me.eccentric_nz.plugins.discoverwarps.DiscoverWarps
 name: DiscoverWarps
 startup: postworld
 version: '1.2.4'
-soft-depend: [Vault,Multiverse-Core,MultiWorld]
+soft-depend: [Vault,Multiverse-Core]
 permissions:
   discoverwarps.use:
     description: Allow players to use DiscoverWarps
@@ -16,5 +16,5 @@ permissions:
 commands:
   discoverwarps:
     aliases: [dw]
-    description: Allow players to set, delete, enable, disable, list and teleport to DiscoverWarps
+    description: Allow players to set, delete, list, and teleport to DiscoverWarps
     usage: type /<command> to see help...

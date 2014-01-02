@@ -19,8 +19,6 @@ localisation:
     no_warp_name: You need to supply a warp name!
     needs_discover: You need to discover %s before you can teleport to it!
     added: DiscoverPlate %s added!
-    enabled: DiscoverPlate %s enabled!
-    disabled: DiscoverPlate %s disabled!
     deleted: DiscoverPlate %s deleted!
     str_true: true
     str_false: false
@@ -42,8 +40,6 @@ localisation:
   help:
     set: To set a stone or wood pressure plate as a DiscoverPlate, stand on it and then type
     delete: To delete a DiscoverPlate type
-    disable: To disable a DiscoverPlate type
-    enable: To enable a DiscoverPlate type
     list: To list DiscoverPlates type
     warp: To warp to a DiscoverPlate type
     buy: To buy a DiscoverPlate location type
