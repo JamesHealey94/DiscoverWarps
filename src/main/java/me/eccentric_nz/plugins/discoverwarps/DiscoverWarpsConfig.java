@@ -22,7 +22,6 @@ public class DiscoverWarpsConfig {
 
         // boolean
         boolOptions.put("no_damage", false);
-        boolOptions.put("allow_buying", false);
         boolOptions.put("localisation.commands.str_true", true);
         boolOptions.put("localisation.commands.str_false", false);
 
@@ -39,7 +38,6 @@ public class DiscoverWarpsConfig {
         strOptions.put("localisation.commands.name_in_use", "That name is already in use!");
         strOptions.put("localisation.commands.no_plate_name", "Couldn't find a DiscoverPlate with that name!");
         strOptions.put("localisation.commands.only_player", "This command requires a player!");
-        strOptions.put("localisation.commands.cost", "The last argument must be a number!");
         strOptions.put("localisation.commands.none_set", "There are no DiscoverPlates to find!");
         strOptions.put("localisation.commands.no_warp_name", "You need to supply a warp name!");
         strOptions.put("localisation.commands.needs_discover", "You need to discover %s before you can teleport to it!");
@@ -47,7 +45,7 @@ public class DiscoverWarpsConfig {
         strOptions.put("localisation.commands.enabled", "DiscoverPlate %s enabled!");
         strOptions.put("localisation.commands.disabled", "DiscoverPlate %s disabled!");
         strOptions.put("localisation.commands.deleted", "DiscoverPlate %s deleted!");
-        strOptions.put("localisation.commands.restart", "A server restart will be needed in order to hook %s into your economy plugin");
+        //strOptions.put("localisation.commands.restart", "A server restart will be needed in order to hook %s into your economy plugin"); TODO update to permissions once rest of plugin is updated
         strOptions.put("localisation.buying.no_buying", "You are not allowed to buy DiscoverWarps on this server!");
         strOptions.put("localisation.buying.cannot_buy", "You cannot buy the location of DiscoverPlate %s!");
         strOptions.put("localisation.buying.no_need", "You have already discovered %s!");
@@ -62,11 +60,9 @@ public class DiscoverWarpsConfig {
         strOptions.put("localisation.help.delete", "To delete a DiscoverPlate type");
         strOptions.put("localisation.help.disable", "To disable a DiscoverPlate type");
         strOptions.put("localisation.help.enable", "To enable a DiscoverPlate type");
-        strOptions.put("localisation.help.cost", "To set a cost to buy a DiscoverPlate location type");
         strOptions.put("localisation.help.list", "To list DiscoverPlates type");
         strOptions.put("localisation.help.warp", "To warp to a DiscoverPlate type");
         strOptions.put("localisation.help.buy", "To buy a DiscoverPlate location type");
-        strOptions.put("localisation.help.config", "To toggle DiscoverWarps config settings type");
     }
 
     public void checkConfig() {

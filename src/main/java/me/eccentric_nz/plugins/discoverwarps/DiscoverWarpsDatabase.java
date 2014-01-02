@@ -28,7 +28,7 @@ public class DiscoverWarpsDatabase {
     public void createTables() {
         try {
             statement = connection.createStatement();
-            final String queryWarps = "CREATE TABLE IF NOT EXISTS discoverwarps (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT COLLATE NOCASE, world TEXT, x INTEGER, y INTEGER, z INTEGER, enabled INTEGER, cost INTEGER DEFAULT 0)";
+            final String queryWarps = "CREATE TABLE IF NOT EXISTS discoverwarps (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT COLLATE NOCASE, world TEXT, x INTEGER, y INTEGER, z INTEGER, enabled INTEGER)";
             statement.executeUpdate(queryWarps);
             final String queryVisited = "CREATE TABLE IF NOT EXISTS players (pid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, player TEXT COLLATE NOCASE, visited TEXT)";
             statement.executeUpdate(queryVisited);

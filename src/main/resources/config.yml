@@ -1,6 +1,5 @@
 no_damage: false
 no_damage_time: 10
-allow_buying: false
 
 ## do not remove or change '%s' as these are needed to insert the warp names and config options
 localisation:
@@ -16,7 +15,6 @@ localisation:
     name_in_use: That name is already in use!
     no_plate_name: Couldn't find a DiscoverPlate with that name!
     only_player: This command requires a player!
-    cost: The last argument must be a number!
     none_set: There are no DiscoverPlates to find!
     no_warp_name: You need to supply a warp name!
     needs_discover: You need to discover %s before you can teleport to it!
@@ -26,7 +24,7 @@ localisation:
     deleted: DiscoverPlate %s deleted!
     str_true: true
     str_false: false
-    restart: A server restart will be needed in order to hook %s into your economy plugin
+## restart: A server restart will be needed in order to hook %s into your economy plugin TODO change to permissions once plugin is updated
   ## buying messages
   buying:
     no_buying: You are not allowed to buy DiscoverWarps on this server!
@@ -46,8 +44,6 @@ localisation:
     delete: To delete a DiscoverPlate type
     disable: To disable a DiscoverPlate type
     enable: To enable a DiscoverPlate type
-    cost: To set a cost to buy a DiscoverPlate location type
     list: To list DiscoverPlates type
     warp: To warp to a DiscoverPlate type
     buy: To buy a DiscoverPlate location type
-    config: To toggle DiscoverWarps config settings type

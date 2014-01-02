@@ -38,8 +38,6 @@ public class DiscoverWarpsCommands implements CommandExecutor {
         admincmds.add("delete");
         admincmds.add("enable");
         admincmds.add("disable");
-        admincmds.add("cost");
-        admincmds.add("allow_buying");
 
         this.usercmds = new ArrayList<String>();
         usercmds.add("tp");
@@ -61,11 +59,9 @@ public class DiscoverWarpsCommands implements CommandExecutor {
                         + "\n" + plugin.getConfig().getString("localisation.help.delete") + ":\n" + ChatColor.GREEN + "/dw delete [name]" + ChatColor.RESET
                         + "\n" + plugin.getConfig().getString("localisation.help.disable") + ":\n" + ChatColor.GREEN + "/dw disable [name]" + ChatColor.RESET
                         + "\n" + plugin.getConfig().getString("localisation.help.enable") + ":\n" + ChatColor.GREEN + "/dw enable [name]" + ChatColor.RESET
-                        + "\n" + plugin.getConfig().getString("localisation.help.cost") + ":\n" + ChatColor.GREEN + "/dw cost [name] [amount]" + ChatColor.RESET
                         + "\n" + plugin.getConfig().getString("localisation.help.list") + ":\n" + ChatColor.GREEN + "/dw list" + ChatColor.RESET
                         + "\n" + plugin.getConfig().getString("localisation.help.warp") + ":\n" + ChatColor.GREEN + "/dw tp [name]" + ChatColor.RESET
-                        + "\n" + plugin.getConfig().getString("localisation.help.buy") + ":\n" + ChatColor.GREEN + "/dw buy [name]" + ChatColor.RESET
-                        + "\n" + plugin.getConfig().getString("localisation.help.config") + ":\n" + ChatColor.GREEN + "/dw [config setting name]" + ChatColor.RESET + " e.g. /dw allow_buying";
+                        + "\n" + plugin.getConfig().getString("localisation.help.buy") + ":\n" + ChatColor.GREEN + "/dw buy [name]" + ChatColor.RESET;
                 sender.sendMessage(plugin_name + plugin.getConfig().getString("localisation.commands.help"));
                 sender.sendMessage("------------");
                 sender.sendMessage(HELP.split("\n"));
@@ -74,17 +70,6 @@ public class DiscoverWarpsCommands implements CommandExecutor {
             if (admincmds.contains(args[0])) {
                 if (!sender.hasPermission("discoverwarps.admin")) {
                     sender.sendMessage(plugin_name + plugin.getConfig().getString("localisation.commands.permission"));
-                    return true;
-                }
-                if (args[0].equalsIgnoreCase("allow_buying")) {
-                    final boolean bool = !plugin.getConfig().getBoolean("allow_buying");
-                    plugin.getConfig().set("allow_buying", bool);
-                    final String boolString = (bool) ? plugin.getConfig().getString("localisation.commands.str_true") : plugin.getConfig().getString("localisation.commands.str_false");
-                    sender.sendMessage(plugin_name + "allow_buying " + String.format(plugin.getConfig().getString("localisation.config"), boolString));
-                    if (bool) {
-                        sender.sendMessage(plugin_name + String.format(plugin.getConfig().getString("localisation.commands.restart"), plugin_name));
-                    }
-                    plugin.saveConfig();
                     return true;
                 }
                 if (args.length < 2) {
@@ -199,33 +184,6 @@ public class DiscoverWarpsCommands implements CommandExecutor {
                         plugin.debug("Could not disable discover plate, " + e);
                     }
                 }
-                if (args[0].equalsIgnoreCase("cost")) {
-                    try {
-                        final Connection connection = service.getConnection();
-                        final Statement statement = connection.createStatement();
-                        final String queryCost = "SELECT name FROM discoverwarps WHERE name = '" + args[1] + "'";
-                        final ResultSet rsCost = statement.executeQuery(queryCost);
-                        // check name is valid
-                        if (rsCost.isBeforeFirst()) {
-                            int cost;
-                            try {
-                                cost = Integer.parseInt(args[2]);
-                            } catch (NumberFormatException nfe) {
-                                sender.sendMessage(plugin_name + plugin.getConfig().getString("localisation.commands.cost"));
-                                return true;
-                            }
-                            final String queryDel = "UPDATE discoverwarps SET cost = " + cost + " WHERE name = '" + args[1] + "'";
-                            statement.executeUpdate(queryDel);
-                            sender.sendMessage(plugin_name + "DiscoverPlate " + args[1] + " now costs " + cost + " to buy!");
-                            return true;
-                        } else {
-                            sender.sendMessage(plugin_name + plugin.getConfig().getString("localisation.commands.no_plate_name"));
-                            return true;
-                        }
-                    } catch (SQLException e) {
-                        plugin.debug("Could not set discover plate cost, " + e);
-                    }
-                }
             }
             if (usercmds.contains(args[0])) {
                 if (!sender.hasPermission("discoverwarps.use")) {
@@ -247,7 +205,7 @@ public class DiscoverWarpsCommands implements CommandExecutor {
                                 visited = Arrays.asList(rsVisited.getString("visited").split(","));
                             }
                         }
-                        final String queryList = "SELECT id, name, cost FROM discoverwarps WHERE enabled = 1";
+                        final String queryList = "SELECT id, name FROM discoverwarps WHERE enabled = 1";
                         final ResultSet rsList = statement.executeQuery(queryList);
                         // check name is valid
                         if (rsList.isBeforeFirst()) {
@@ -257,14 +215,7 @@ public class DiscoverWarpsCommands implements CommandExecutor {
                             for (int i = 1; rsList.next(); i++) {
                                 discovered = (visited.contains(rsList.getString("id"))) ? ChatColor.GREEN + plugin.getConfig().getString("localisation.visited") : ChatColor.RED + plugin.getConfig().getString("localisation.not_visited");
                                 final String warp = rsList.getString("name");
-                                String cost = "";
-                                if (plugin.getConfig().getBoolean("allow_buying") && !visited.contains(rsList.getString("id"))) {
-                                    final int amount = rsList.getInt("cost");
-                                    if (amount > 0) {
-                                        cost = ChatColor.RESET + " [" + plugin.economy.format(amount) + "]";
-                                    }
-                                }
-                                sender.sendMessage(i + ". " + warp + " " + discovered + cost);
+                                sender.sendMessage(i + ". " + warp + " " + discovered);
                             }
                             sender.sendMessage("------------");
                             return true;
@@ -329,10 +280,6 @@ public class DiscoverWarpsCommands implements CommandExecutor {
                     }
                 }
                 if (args[0].equalsIgnoreCase("buy")) {
-                    if (!plugin.getConfig().getBoolean("allow_buying")) {
-                        sender.sendMessage(plugin_name + plugin.getConfig().getString("localisation.buying.no_buying"));
-                        return true;
-                    }
                     Player player;
                     if (sender instanceof Player) {
                         player = (Player) sender;
@@ -352,14 +299,10 @@ public class DiscoverWarpsCommands implements CommandExecutor {
                         // check name is valid
                         if (rsBuy.next()) {
                             boolean firstplate = true;
-                            final double cost = rsBuy.getDouble("cost");
-                            if (cost <= 0) {
-                                sender.sendMessage(plugin_name + String.format(plugin.getConfig().getString("localisation.buying.cannot_buy"), args[1]));
-                                return true;
-                            }
+                            final double cost = 10; // TODO replace with amount of certain item in config
                             final String p = player.getName();
                             // check they have sufficient balance
-                            final double bal = plugin.economy.getBalance(p);
+                            final double bal = 10; // TODO replace with current amount of certain item in inventory
                             if (cost > bal) {
                                 player.sendMessage(plugin_name + plugin.getConfig().getString("localisation.buying.no_money"));
                                 return true;
@@ -383,7 +326,7 @@ public class DiscoverWarpsCommands implements CommandExecutor {
                                 queryDiscover = "INSERT INTO players (player, visited) VALUES ('" + p + "','" + id + "')";
                             }
                             statement.executeUpdate(queryDiscover);
-                            plugin.economy.withdrawPlayer(p, cost);
+                            // TODO remove X items from player inventory
                             player.sendMessage(plugin_name + String.format(plugin.getConfig().getString("localisation.buying.bought"), args[1]) + " " + cost);
                             return true;
                         } else {
